@@ -2,7 +2,7 @@
 <head>
 <Title>Registration Form</Title>
 <style type="text/css">
-    body { background-color: #fff; border-top: solid 10px #000;
+    body { background-color: #109; border-top: solid 10px #000;
         color: #333; font-size: .85em; margin: 20; padding: 20;
         font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     }
@@ -17,20 +17,21 @@
 </head>
 <body>
 <h1>Register here!</h1>
-<p>Fill in your name and email address, then click <strong>Submit</strong> to register.</p>
+<p>Fill in your name , email address and Company Name then click <strong>Submit</strong> to register.</p>
 <form method="post" action="index.php" enctype="multipart/form-data" >
       Name  <input type="text" name="name" id="name"/></br>
       Email <input type="text" name="email" id="email"/></br>
+      Company Name<input type="text" name="company" id="company"/></br>
       <input type="submit" name="submit" value="Submit" />
 </form>
 <?php
     // DB connection info
     //TODO: Update the values for $host, $user, $pwd, and $db
     //using the values you retrieved earlier from the portal.
-    $host = "us-cdbr-azure-northcentral-a.cleardb.com";
-    $user = "bd188ec6c6a3fb";
-    $pwd = "684ad8c3";
-    $db = "ulaszeyrek";
+    $host = "eu-cdbr-azure-west-b.cloudapp.net";
+    $user = "bb1793e5f75dc8";
+    $pwd = "6e841d05";
+    $db = "chaitanAa5x4m5qb";
     // Connect to database.
     try {
         $conn = new PDO( "mysql:host=$host;dbname=$db", $user, $pwd);
@@ -45,13 +46,15 @@
         $name = $_POST['name'];
         $email = $_POST['email'];
         $date = date("Y-m-d");
+        $company = $_POST['company'];
         // Insert data
-        $sql_insert = "INSERT INTO registration_tbl (name, email, date) 
-                   VALUES (?,?,?)";
+        $sql_insert = "INSERT INTO registration_tbl (name, email, date,company) 
+                   VALUES (?,?,?,?)";
         $stmt = $conn->prepare($sql_insert);
         $stmt->bindValue(1, $name);
         $stmt->bindValue(2, $email);
         $stmt->bindValue(3, $date);
+        $stmt->bindValue(4, $company);
         $stmt->execute();
     }
     catch(Exception $e) {
@@ -68,11 +71,13 @@
         echo "<table>";
         echo "<tr><th>Name</th>";
         echo "<th>Email</th>";
-        echo "<th>Date</th></tr>";
+        echo "<th>Date</th>";
+        echo "<th>Company</th></tr>";
         foreach($registrants as $registrant) {
             echo "<tr><td>".$registrant['name']."</td>";
             echo "<td>".$registrant['email']."</td>";
-            echo "<td>".$registrant['date']."</td></tr>";
+            echo "<td>".$registrant['date']."</td>";
+            echo "<td>".$registrant['company']."</td></tr>";
         }
         echo "</table>";
     } else {
